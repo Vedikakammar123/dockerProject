@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  djnago_app:
+  django_app:
     build: .
     env_file:
       -  .env
@@ -20,7 +20,7 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - djnago_app
+      - django_app
       
 volumes:
   static_vol:
