@@ -5,7 +5,6 @@ COPY  ./my_app ./
 
 RUN pip install --upgrade pip --no-cache-dir
 RUN pip install -r /app/requirements.txt --no-cache-dir
-RUN python manage.py collectstatic --noinput /app/static
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
