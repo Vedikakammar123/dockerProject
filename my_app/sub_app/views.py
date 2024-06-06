@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render # type: ignore
 from .forms import MyForm 
 
 # Create your views here.
