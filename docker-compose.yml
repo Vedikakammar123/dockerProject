@@ -4,24 +4,32 @@ services:
   django_app:
     build: .
     env_file:
-      -  .env
-    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn main_app.wsgi:application --bind 0.0.0.0:8000 "
+      - .env
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn main_app.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - static_vol:/app/staticfiles
       - media_vol:/app/media
     ports:
       - "8000:8000"
+    networks:
+      - webnet
 
   nginx:
     build: ./nginx
     volumes:
       - static_vol:/app/staticfiles
       - media_vol:/app/media
+      
     ports:
       - "80:80"
     depends_on:
       - django_app
-      
+    networks:
+      - webnet
+
 volumes:
   static_vol:
   media_vol:
+
+networks:
+  webnet:
