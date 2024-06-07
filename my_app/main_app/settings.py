@@ -72,6 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main_app.wsgi.application'
+CSRF_TRUSTED_ORIGINS = ['http://13.233.119.195']
 
 
 # Database
