@@ -1,11 +1,11 @@
 from django.db.models import Count
 from django.urls import reverse
 from django.shortcuts import render, redirect
-from .models import MyModel
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from .forms import UserLoginForm
-
+from .models import MyModel
+from django.contrib.auth import logout
 
 
 import random
@@ -27,6 +27,7 @@ def thank_you(request, user_info_id):
         'show_records_url': reverse('show_records')
     })
 
+@login_required
 def show_records(request):
     all_user_info = MyModel.objects.values('text').annotate(text_count=Count('text'))
     sorted_data = sorted(list(all_user_info), key=lambda x: x['text_count'])
@@ -42,9 +43,8 @@ def show_records(request):
     })
 
 def user_login(request):
-    error_message = None
     if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
+        form = UserLoginForm(request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -53,11 +53,16 @@ def user_login(request):
                 login(request, user)
                 return redirect('show_records')
             else:
-                error_message = "Invalid username or password. Please try again."
+                error_message = "Invalid username or password"
         else:
-            error_message = "Invalid username or password. Please try again."
-    
+            error_message = "Invalid username or password"
     else:
         form = UserLoginForm()
+        error_message = ""
 
-    return render(request, 'login.html', {'form': form,'error_message': error_message})
+    return render(request, 'login.html', {'form': form, 'error_message': error_message})
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return redirect('login')  # Redirect to the login page after logout

@@ -65,11 +65,15 @@
             display: none; /* Hide the chart container initially */
             justify-content: center;
         }
+        .logout-btn {
+            background-color: #dc3545; /* Red color */
+           
+        }
     </style>
 </head>
 <body>
     
-    <div class="container">
+    {% comment %} <div class="container">
         <h1>All User Records</h1>
         <table>
             <thead>
@@ -95,8 +99,9 @@
                 {% endfor %}
             </tbody>
         </table>
-        <a href="{% url 'form_page' %}" class="btn">Back to Home</a>
+        <a href="{% url 'form_page' %}" class="btn">Back to Home</a> {% endcomment %}
         <button id="showChartBtn" class="btn" onclick="showChart()">Show Chart</button>
+            <a href="{% url 'user_logout' %}" class="btn logout-btn">Logout</a>
     
     </div>
    
@@ -115,7 +120,7 @@
                 datasets: [{
                     label: 'Text Frequency',
                     data: {{ chart_data|safe }},
-                    //fill: true,
+                    fill: true,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 2
                 }]
