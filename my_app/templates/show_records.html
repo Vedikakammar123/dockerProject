@@ -1,13 +1,11 @@
 <!-- templates/show_records.html -->
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Show Records</title>
-    <style>
-        body {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     <style>
+      body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
@@ -56,20 +54,28 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             text-align: center;
+            text-decoration: none;
         }
         .btn:hover {
             background-color: #0056b3;
         }
+       
+        .chart-container {
+            width: 80%;
+            display: none; /* Hide the chart container initially */
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
+    
     <div class="container">
         <h1>All User Records</h1>
         <table>
             <thead>
                 <tr>
                     <th>Name</th>
-                  
+                    
                     <th>File</th>
                 </tr>
             </thead>
@@ -90,6 +96,39 @@
             </tbody>
         </table>
         <a href="{% url 'form_page' %}" class="btn">Back to Home</a>
+        <button id="showChartBtn" class="btn" onclick="showChart()">Show Chart</button>
+    
     </div>
+   
+    <!-- Chart -->
+    <div class="chart-container" id="chartContainer">
+        <canvas id="myChart"></canvas>
+    </div>
+    <script>
+        function showChart() {
+            document.getElementById('chartContainer').style.display = 'block';
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+            type: 'line',  // You can change this to 'line' for a line chart
+            data: {
+                labels: {{ chart_labels|safe }},
+                datasets: [{
+                    label: 'Text Frequency',
+                    data: {{ chart_data|safe }},
+                    fill: true,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        }
+    </script>
 </body>
 </html>
